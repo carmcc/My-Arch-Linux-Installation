@@ -87,6 +87,7 @@
    ```
    
  ## 2. Installation
+ 
  - #### Selecting the mirrors
      Mirror servers are defined in `/etc/pacman.d/mirrorlist` and i use [reflector](https://wiki.archlinux.org/title/Reflector) to update my mirrors.  Somtimes i edit the file manually.  
  - #### Installing essential packages
@@ -96,3 +97,100 @@
      ```
      `Nano` is not required but i prefer installing it now to edit some text files later.
      I install other packages through `pacman` once I'm `chrooted` into the new system. 
+
+
+## 3. Configuring the system
+
+- #### Fstab File
+     - I generate the `fstab` file:
+     ```
+     genfstab -U /mnt >> /mnt/etc/fstab
+     ```
+- #### Chroot
+     - Changing root into the new system:
+     ```
+     arch-chroot /mnt
+     ```
+- #### Time zone
+     - Setting the time zone
+     ```
+     ln -sf /usr/share/zoneinfo/Europe/Rome /etc/localtime
+     ```
+     - Time clocks utility
+     ```
+     hwsystohc --systohc
+     ```
+- #### Localization
+     - To generate needed locales I uncomment `locales` I want from `/etc/locale.gen` and run
+     ```
+     locale-gen
+     ```
+     - I create the `locale.conf` file, and set the LANG variable through:
+     ```
+     nano /etc/locale.conf
+     ```
+     And then 
+     ```
+     LANG=it_IT.UTF-8
+     ```
+     - Changing the console keyboard layout is possible by creating `v.console.conf`
+     ```
+     nano /etc/vconsole.conf
+     ```
+     And then 
+     ```
+     KEYMAP=it
+     ```
+- #### Network Configuration
+     - To set the `hostname` of my machine I use:
+     ```
+     echo "myhostname" >> /etc/hostname
+     ```
+     - I complete the network configuration by installing some packages like `netctl`, `net-tools`, `dhcpcd`, `networkmanager` with `pacman`. Dhcpcd must be enabled.
+     
+- #### Root Password
+     - I set the root password by typing
+     ```
+     passwd
+     ```
+- #### Boot Loader installation
+     - I install the GRUB `bootloader` through pacman:
+     ```
+     pacman -S grub efibootmgr
+     ```
+     - If I want to do a dual boot I also install `os prober`
+     ```
+     pacman -S os-prober
+     ```
+     - Then I install GRUB with
+     ```
+     grub-install
+     ```
+     - It's necessary to generate all the files and entries for GRUB with
+     ```
+     grub-mkconfig -o /boot/grub/grub.cfg
+     ```
+- #### Adding a user
+     - I create a user with
+     ```
+     useradd -m user_name
+     ```
+     - Now the password for this user
+     ```
+     passwd user_name
+     ```
+      
+     
+- #### X.Org Server and DE installation
+     - Now it's time to reboot and setup a `display server` and a `desktop enviroment`
+     ```
+     pacman -S xorg plasma sddm
+     ```
+     - Once all these packages are installed I must enable the display manager `sddm` through the command
+     ```
+     systemctl enable sddm.service
+     ```
+     - Reboot and enjoy :)
+     
+    
+      
