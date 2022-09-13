@@ -179,6 +179,7 @@
      ```
      passwd user_name
      ```
+     - I type `visudo` to give the `sudo` commands to the created user
       
      
 - #### X.Org Server and DE installation
