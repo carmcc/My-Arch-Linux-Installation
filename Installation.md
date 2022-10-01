@@ -118,7 +118,7 @@
      ```
      - Time clocks utility
      ```
-     hwsystohc --systohc
+     hwclock --systohc
      ```
 - #### Localization
      - To generate needed locales I uncomment `locales` I want from `/etc/locale.gen` and run
